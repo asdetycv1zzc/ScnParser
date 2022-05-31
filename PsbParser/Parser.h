@@ -39,6 +39,9 @@ private:
 	};*/
 	typedef struct ScnSingleString
 	{
+#ifdef _DEBUG
+		uint _Ptr;
+#endif
 		size_t _beginPos = 0;
 		std::wstring _Content;
 		size_t _endPos = 0;

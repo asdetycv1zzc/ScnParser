@@ -122,7 +122,7 @@ void ScnParser::FindAllText() noexcept
 
 		char* _temp = new char[_size];
 		memcpy(_temp, stream->GetBase() + _beginPos, _size * sizeof(char) / sizeof(BYTE));
-		string _content = UnicodeToUtf8(StringToWString(_temp));
+		string _content = _temp;
 
 		delete[] _temp;
 		_temp = nullptr;
@@ -157,9 +157,18 @@ void ScnParser::FindAllText() noexcept
 								ScnSingleString _scnSingleString;
 								_scnSingleString._Content = StringToWString(singleLine.asString().c_str());
 								_scnSingleString._beginPos = singleLine.getOffsetStart() + _beginPos + 1; //Go over the " symbol
-								_scnSingleString._endPos = _scnSingleString._beginPos + _scnSingleString._Content.size() * sizeof(char) / sizeof(BYTE);
+								_scnSingleString._Ptr = (uint)(stream->GetBase() + _scnSingleString._beginPos);
+								stream->Seek(_scnSingleString._beginPos, MEM_BEG);
+								char buffer = 0;
+								do
+								{
+									stream->Read(&buffer, sizeof(char));
+								} 
+								while (buffer != '\"');
+								_scnSingleString._endPos = stream->GetPosition() - 1;
+								//_scnSingleString._endPos = _scnSingleString._beginPos + _scnSingleString._Content.size() * sizeof(char) / sizeof(BYTE);
 								_scnSingleString._realSize = _scnSingleString._Content.size();
-								_scnSingleString._takeupSize = _scnSingleString._Content.size();
+								_scnSingleString._takeupSize = _scnSingleString._endPos - _scnSingleString._beginPos;
 								_scnString.Content.push_back(_scnSingleString);
 							}
 								
