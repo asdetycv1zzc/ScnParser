@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\NativeCSharp">
+      <UniqueIdentifier>{7f45161e-b076-40d5-bf8e-370fdbecee6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\NativeCSharp">
+      <UniqueIdentifier>{23b54d59-1682-4a39-a18f-f2c6d899bdfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\JSON">
+      <UniqueIdentifier>{41cce699-ecf4-4e70-aa07-7f8b1a07847a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\JSON">
+      <UniqueIdentifier>{aef06e86-b9bd-43c8-92ef-0f30448ec667}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Parser.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryStream.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="csharp_types.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="CSharpString.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="Encoding.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="Encoding_Alt.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>头文件\NativeCSharp</Filter>
+    </ClInclude>
+    <ClInclude Include="json_tool.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\allocator.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\assertions.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\config.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\forwards.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\json_features.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\reader.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\value.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\version.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="json\writer.h">
+      <Filter>头文件\JSON</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryStream.cpp">
+      <Filter>源文件\NativeCSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="CSharpString.cpp">
+      <Filter>源文件\NativeCSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="Encoding.cpp">
+      <Filter>源文件\NativeCSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>源文件\NativeCSharp</Filter>
+    </ClCompile>
+    <ClCompile Include="json_reader.cpp">
+      <Filter>源文件\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="json_value.cpp">
+      <Filter>源文件\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="json_writer.cpp">
+      <Filter>源文件\JSON</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="json_valueiterator.inl">
+      <Filter>头文件\JSON</Filter>
+    </None>
+  </ItemGroup>
+</Project>
