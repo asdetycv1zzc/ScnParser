@@ -130,15 +130,12 @@ void ScnParser::FindAllText() noexcept
 		Json::Reader reader;
 		Json::Value root;
 		wstring _speaker;
-		vector<wstring> _words;
 
 		if (reader.parse(_content.c_str(), _content.c_str() + _content.size(), root))
 		{
 			for (auto& block : root)
 			{
 				ScnString _scnString;
-				
-				_words.clear();
 
 				_scnString.Speaker = StringToWString(block[0].asString().c_str());
 
