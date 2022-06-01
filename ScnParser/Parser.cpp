@@ -46,7 +46,7 @@ void ScnParser::ReadFile(const wstring& _source) noexcept
 	fileStream.close();
 }
 
-size_t ScnParser::FindTextMagic() noexcept
+size_t ScnJsonParser::FindTextMagic() noexcept
 {
 	vector<BYTE> _Mark = _magic;
 	size_t _Pos = 0;
@@ -64,7 +64,7 @@ size_t ScnParser::FindTextMagic() noexcept
 	}
 	return wstring::npos;
 }
-size_t ScnParser::FindTextMagic(size_t _offset) noexcept
+size_t ScnJsonParser::FindTextMagic(size_t _offset) noexcept
 {
 	vector<BYTE> _Mark = _magic;
 	size_t _Pos = 0 + _offset;
@@ -83,7 +83,7 @@ size_t ScnParser::FindTextMagic(size_t _offset) noexcept
 	return wstring::npos;
 }
 
-size_t ScnParser::FindTextEnd() noexcept
+size_t ScnJsonParser::FindTextEnd() noexcept
 {
 	auto _beginPos = FindTextMagic();
 	size_t _Pos = _beginPos;
@@ -98,7 +98,7 @@ size_t ScnParser::FindTextEnd() noexcept
 	} while (ClosureCount != 0);
 	return _Pos - 1;
 }
-size_t ScnParser::FindTextEnd(size_t _offset) noexcept
+size_t ScnJsonParser::FindTextEnd(size_t _offset) noexcept
 {
 	auto _beginPos = FindTextMagic(_offset);
 	size_t _Pos = _beginPos;
@@ -113,7 +113,7 @@ size_t ScnParser::FindTextEnd(size_t _offset) noexcept
 	} while (ClosureCount != 0);
 	return _Pos - 1;
 }
-void ScnParser::FindAllText() noexcept
+void ScnJsonParser::FindAllText() noexcept
 {
 	size_t _beginPos = FindTextMagic();
 	size_t _endPos = FindTextEnd();
@@ -192,7 +192,7 @@ void ScnParser::FindAllText() noexcept
 
 
 extern "C" _declspec(dllexport)
-bool WINAPI ScnParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
+bool WINAPI ScnJsonParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
 {
 	if (ScnStringPool.empty())
 	{
@@ -235,7 +235,7 @@ bool WINAPI ScnParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
 	return true;
 }
 extern "C" _declspec(dllexport)
-bool WINAPI ScnParser::Init(_In_ LPCWSTR _FileAddress)
+bool WINAPI ScnJsonParser::Init(_In_ LPCWSTR _FileAddress)
 {
 	stream = nullptr;
 	try
@@ -251,52 +251,52 @@ bool WINAPI ScnParser::Init(_In_ LPCWSTR _FileAddress)
 	
 }
 extern "C" _declspec(dllexport)
-ScnParser * WINAPI EstablishPointer()
+ScnJsonParser * WINAPI JsonParserEstablishPointer()
 {
-	ScnParser* _parser = new ScnParser();
+	ScnJsonParser* _parser = new ScnJsonParser();
 	return _parser;
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser()
+WINAPI ScnJsonParser::ScnJsonParser()
 {
 	stream = nullptr;
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser(const string& _fileAddress)
-{
-	stream = nullptr;
-	ReadFile(_fileAddress);
-	//FindAllText();
-}
-extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser(const wstring& _fileAddress)
+WINAPI ScnJsonParser::ScnJsonParser(const string& _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser(const LPCSTR _fileAddress)
+WINAPI ScnJsonParser::ScnJsonParser(const wstring& _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser(const LPCWSTR _fileAddress)
+WINAPI ScnJsonParser::ScnJsonParser(const LPCSTR _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::ScnParser(BYTE* _buffer, size_t _size)
+WINAPI ScnJsonParser::ScnJsonParser(const LPCWSTR _fileAddress)
+{
+	stream = nullptr;
+	ReadFile(_fileAddress);
+	//FindAllText();
+}
+extern "C" _declspec(dllexport)
+WINAPI ScnJsonParser::ScnJsonParser(BYTE* _buffer, size_t _size)
 {
 	stream = new MemoryStream(_buffer, _size);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnParser::~ScnParser()
+WINAPI ScnJsonParser::~ScnJsonParser()
 {
 	if (stream != nullptr)
 	{
@@ -310,11 +310,11 @@ WINAPI ScnParser::~ScnParser()
 		fileStream.close();
 	}
 }
-extern "C" _declspec(dllexport) bool WINAPI Init(ScnParser * _Ptr, _In_ LPCWSTR _FileAddress)
+extern "C" _declspec(dllexport) bool WINAPI JsonParserInit(ScnJsonParser * _Ptr, _In_ LPCWSTR _FileAddress)
 {
 	return _Ptr->Init(_FileAddress);
 }
-extern "C" _declspec(dllexport) bool WINAPI Parse(ScnParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size)
+extern "C" _declspec(dllexport) bool WINAPI JsonParserParse(ScnJsonParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size)
 {
 	return _Ptr->Parse(_Dest, _size);
 }

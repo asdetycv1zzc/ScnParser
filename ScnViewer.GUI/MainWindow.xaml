@@ -1,12 +1,31 @@
-﻿<Window x:Class="ScnViewer.GUI.MainWindow"
+﻿<Window x:Name="Window_Main" x:Class="ScnViewer.GUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
         xmlns:local="clr-namespace:ScnViewer.GUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ScnViewer.GUI" Height="720" Width="1280" ResizeMode="CanMinimize" WindowStyle="SingleBorderWindow">
     <Grid>
-        
+        <TreeView x:Name="TreeView_ScnStrings"
+pu:TreeViewHelper.TreeViewStyle="Modern"
+pu:TreeViewHelper.ItemHeight="20"
+pu:TreeViewHelper.SelectedForeground="#FFB5B5B5" Margin="10,69,760,10" >
+        </TreeView>
+        <Button x:Name="Button_Confirm"
+Content="Confirm"
+pu:ButtonHelper.ClickStyle="Sink"
+FontFamily="{StaticResource FontAwesome}"
+pu:ButtonHelper.ButtonStyle="Hollow"
+BorderBrush="#FF3F3F3F"
+Foreground="#FF3F3F3F"
+pu:ButtonHelper.HoverBrush="#3F3F3F"
+pu:ButtonHelper.CornerRadius="5" Margin="382,12,760,641" Click="Button_Confirm_Click" />
+        <TextBox x:Name="TextBox_Address"
+pu:TextBoxHelper.Watermark="Watermark"
+pu:TextBoxHelper.FocusedBorderBrush="#FF0014"
+pu:TextBoxHelper.FocusedShadowColor="#FF0014"
+pu:TextBoxHelper.CornerRadius="12" Margin="10,10,903,641" Cursor="IBeam" Text="N:\Users\John\source\repos\ScnParser\Debug\サガプラ怪盗　あてな　２.txt.json"/>
     </Grid>
 </Window>

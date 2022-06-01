@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>N:\Users\John\source\repos\PsbParser\PsbParser\zlib;N:\Users\John\source\repos\PsbParser\PsbParser;$(VC_IncludePath);$(WindowsSDK_IncludePath);N:\Users\John\source\repos\PsbParser\PsbParser\jsoncpp_static</IncludePath>
+    <IncludePath>N:\Users\John\source\repos\ScnParser\ScnParser\zlib;N:\Users\John\source\repos\ScnParser\ScnParser;$(VC_IncludePath);$(WindowsSDK_IncludePath);N:\Users\John\source\repos\ScnParser\ScnParser\jsoncpp_static</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

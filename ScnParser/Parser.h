@@ -8,36 +8,9 @@
 #include "MemoryStream.h"
 #include "json.h"
 
-#ifdef __cplusplus
-
-#define TEXPORT extern "c" _declspec(dllexport)
-
-#else
-
-#define TEXPORT _declspec(dllexport)
-
-#endif
-
-
 class ScnParser
 {
-private:
-
-	const std::vector<BYTE> _magic
-	{
-		0x22,0x74,0x65,0x78,
-		0x74,0x73,0x22,0x20,
-		0x3A,0x20,0x0A,0x09,
-		0x09,0x09
-	};
-	/*
-	const std::vector<BYTE> _magic
-	{
-		0x22,0x74,0x65,0x78,
-		0x74,0x73,0x22,0x3A,
-		0x20
-	};*/
-
+protected:
 	typedef struct ScnSingleString
 	{
 		uint _Ptr;
@@ -53,9 +26,7 @@ private:
 		std::wstring Speaker;
 		std::vector<ScnSingleString> Content;
 	};
-
 	std::vector<ScnString> ScnStringPool;
-
 	MemoryStream* stream;
 	std::fstream fileStream;
 
@@ -63,6 +34,27 @@ private:
 	void ReadFile(const std::string& _source) noexcept;
 	void ReadFile(const LPCWSTR _source) noexcept;
 	void ReadFile(const LPCSTR _source) noexcept;
+public:
+	_declspec(dllexport) virtual bool WINAPI Parse(_Out_ BYTE* _Dest, _Out_ ulong& _size);
+	_declspec(dllexport) virtual bool WINAPI Init(_In_ LPCWSTR _FileAddress);
+};
+class ScnJsonParser : public ScnParser
+{
+private:
+	const std::vector<BYTE> _magic
+	{
+		0x22,0x74,0x65,0x78,
+		0x74,0x73,0x22,0x20,
+		0x3A,0x20,0x0A,0x09,
+		0x09,0x09
+	};
+	/*
+	const std::vector<BYTE> _magic
+	{
+		0x22,0x74,0x65,0x78,
+		0x74,0x73,0x22,0x3A,
+		0x20
+	};*/
 
 	size_t FindTextMagic() noexcept;
 	size_t FindTextMagic(size_t _offset) noexcept;
@@ -70,19 +62,43 @@ private:
 	size_t FindTextEnd(size_t _offset) noexcept;
 
 	void FindAllText() noexcept;
-
 public:
 	_declspec(dllexport) bool WINAPI Parse(_Out_ BYTE* _Dest, _Out_ ulong& _size);
 	_declspec(dllexport) bool WINAPI Init(_In_ LPCWSTR _FileAddress);
-	_declspec(dllexport) WINAPI ScnParser();
-	_declspec(dllexport) WINAPI ScnParser(const std::string& _fileAddress);
-	_declspec(dllexport) WINAPI ScnParser(const std::wstring& _fileAddress);
-	_declspec(dllexport) WINAPI ScnParser(const LPCSTR _fileAddress);
-	_declspec(dllexport) WINAPI ScnParser(const LPCWSTR _fileAddress);
-	_declspec(dllexport) WINAPI ScnParser(BYTE* _buffer, size_t _size);
-	_declspec(dllexport) WINAPI ~ScnParser();
+	_declspec(dllexport) WINAPI ScnJsonParser();
+	_declspec(dllexport) WINAPI ScnJsonParser(const std::string& _fileAddress);
+	_declspec(dllexport) WINAPI ScnJsonParser(const std::wstring& _fileAddress);
+	_declspec(dllexport) WINAPI ScnJsonParser(const LPCSTR _fileAddress);
+	_declspec(dllexport) WINAPI ScnJsonParser(const LPCWSTR _fileAddress);
+	_declspec(dllexport) WINAPI ScnJsonParser(BYTE* _buffer, size_t _size);
+	_declspec(dllexport) WINAPI ~ScnJsonParser();
 };
 
-extern "C" _declspec(dllexport) ScnParser * WINAPI EstablishPointer();
-extern "C" _declspec(dllexport) bool WINAPI Init(ScnParser * _Ptr, _In_ LPCWSTR _FileAddress);
-extern "C" _declspec(dllexport) bool WINAPI Parse(ScnParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size);
+extern "C" _declspec(dllexport) ScnJsonParser * WINAPI EstablishJsonParserPointer();
+extern "C" _declspec(dllexport) bool WINAPI JsonParserInit(ScnJsonParser * _Ptr, _In_ LPCWSTR _FileAddress);
+extern "C" _declspec(dllexport) bool WINAPI JsonParserParse(ScnJsonParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size);
+
+class ScnRawParser : public ScnParser
+{
+private:
+	struct PSBMagicHeader
+	{
+		uint Signature;
+		uint Version;
+		uint Unk;
+		uint Unk2;
+		uint StrOffPos;
+		uint StrDataPos;
+		uint ResOffPos;
+		uint ResLenPos;
+		uint ResDataPos;
+		uint ResIndexTree;
+	} Header;
+
+	void ValidateMagic() noexcept;
+	void ReadMagicHeader() noexcept;
+	bool ReadAllText() noexcept;
+public:
+	_declspec(dllexport) bool WINAPI Parse(_Out_ BYTE* _Dest, _Out_ ulong& _size);
+	_declspec(dllexport) bool WINAPI Init(_In_ LPCWSTR _FileAddress);
+};

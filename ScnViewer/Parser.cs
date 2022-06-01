@@ -12,11 +12,11 @@ namespace ScnViewer
     {
         public class ScnSingleString
         {
-            public System.UInt64 _beginPos;
-            public System.UInt64 _endPos;
-            public System.UInt64 _real_size;
-            public System.UInt64 _memory_size;
-            public System.UInt64 _in_file_size;
+            public UInt64 _beginPos;
+            public UInt64 _endPos;
+            public UInt64 _real_size;
+            public UInt64 _memory_size;
+            public UInt64 _in_file_size;
             public String _Content;
         }
         public class ScnString
@@ -25,11 +25,11 @@ namespace ScnViewer
             public List<ScnSingleString> Content;
         };
         private IntPtr _pointer = IntPtr.Zero;
-        [DllImport("N:\\Users\\John\\source\\repos\\PsbParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern IntPtr EstablishPointer();
-        [DllImport("N:\\Users\\John\\source\\repos\\PsbParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern bool Init(IntPtr ptr, StringBuilder _FileAddress);
-        [DllImport("N:\\Users\\John\\source\\repos\\PsbParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern bool Parse(IntPtr ptr, [MarshalAs(UnmanagedType.LPArray)] byte[] _dest, ref ulong _size);
 
         public bool Init(StringBuilder _FileAddress)

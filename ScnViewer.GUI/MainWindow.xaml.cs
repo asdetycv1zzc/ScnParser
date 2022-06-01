@@ -24,11 +24,27 @@ namespace ScnViewer.GUI
         public MainWindow()
         {
             InitializeComponent();
+        }
+        private void Button_Confirm_Click(object sender, RoutedEventArgs e)
+        {
             Parser parser = new Parser();
             StringBuilder _address = new StringBuilder();
-            _address.Append(@"N:\Users\John\source\repos\PsbParser\Debug\サガプラ怪盗　あてな　２.txt.json");
-            parser.Init(_address);
-            var _result = parser.Parse();
+            _address.Append(TextBox_Address.Text);
+            try
+            {
+                parser.Init(_address);
+                var _result = parser.Parse();
+                var _items = ScnStringHelper.ToTreeViewItems(_result);
+                for(int i = 0; i < _items.Count; i++)
+                {
+                    TreeView_ScnStrings.Items.Add(_items[i]);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
     }
 }
