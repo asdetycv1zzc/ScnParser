@@ -3,6 +3,8 @@
 #include "CSharpString.h"
 #include "str_plugin.h"
 #include "Encoding.h"
+#include "BitConverter.h"
+#include "List.h"
 #include "json/json.h"
 #include <iostream>
 #include <memory>
@@ -164,8 +166,9 @@ void ScnParser::FindAllText() noexcept
 								while (buffer != '\"');
 								_scnSingleString._endPos = stream->GetPosition() - 1;
 								//_scnSingleString._endPos = _scnSingleString._beginPos + _scnSingleString._Content.size() * sizeof(char) / sizeof(BYTE);
-								_scnSingleString._realSize = _scnSingleString._Content.size();
-								_scnSingleString._takeupSize = _scnSingleString._endPos - _scnSingleString._beginPos;
+								_scnSingleString._real_size = _scnSingleString._Content.size();
+								_scnSingleString._memory_size = _scnSingleString._real_size * sizeof(wchar_t);
+								_scnSingleString._in_file_size = _scnSingleString._endPos - _scnSingleString._beginPos;
 								_scnString.Content.push_back(_scnSingleString);
 							}
 								
@@ -186,47 +189,114 @@ void ScnParser::FindAllText() noexcept
 	}
 	return;
 }
-_declspec(dllexport)
-ScnParser::ScnParser()
+
+
+extern "C" _declspec(dllexport)
+bool WINAPI ScnParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
+{
+	if (ScnStringPool.empty())
+	{
+		FindAllText();
+	}
+	vector<BYTE> _result(sizeof(size_t));
+	memcpy(_result.data(), BitConverter::GetBytes(ScnStringPool.size()).data(), sizeof(size_t));
+
+	for (size_t i = 0; i < ScnStringPool.size(); i++)
+	{
+		List<BYTE> _speaker = Encoding::GetBytes(ScnStringPool[i].Speaker);
+		vector<BYTE> _speaker_size = BitConverter::GetBytes(_speaker.size() * sizeof(BYTE));
+		vector<BYTE> _content(sizeof(size_t));
+		memcpy(_content.data(), BitConverter::GetBytes(ScnStringPool[i].Content.size()).data(), sizeof(size_t));
+		for (size_t j = 0; j < ScnStringPool[i].Content.size(); j++)
+		{
+			MemoryStream* _scnString_sizes = new MemoryStream(new BYTE[5 * sizeof(size_t) / sizeof(BYTE)], 5 * sizeof(size_t) / sizeof(BYTE));
+			_scnString_sizes->Write(BitConverter::GetBytes(ScnStringPool[i].Content[j]._beginPos));
+			_scnString_sizes->Write(BitConverter::GetBytes(ScnStringPool[i].Content[j]._endPos));
+			_scnString_sizes->Write(BitConverter::GetBytes(ScnStringPool[i].Content[j]._real_size));
+			_scnString_sizes->Write(BitConverter::GetBytes(ScnStringPool[i].Content[j]._memory_size));
+			_scnString_sizes->Write(BitConverter::GetBytes(ScnStringPool[i].Content[j]._in_file_size));
+			List<BYTE> _contentString = Encoding::GetBytes(ScnStringPool[i].Content[j]._Content);
+			vector<BYTE> _singleScnString(_scnString_sizes->GetSize() + _contentString.size());
+			memcpy(_singleScnString.data(), _scnString_sizes->GetBase(), _scnString_sizes->GetSize());
+			memcpy(_singleScnString.data() + _scnString_sizes->GetSize(), _contentString.data(), _contentString.size());
+			_content.insert(_content.end(), _singleScnString.begin(),_singleScnString.end());
+			_scnString_sizes->Dispose();
+		}
+		_result.insert(_result.end(), _speaker_size.begin(), _speaker_size.end());
+		_result.insert(_result.end(), _speaker.begin(), _speaker.end());
+		_result.insert(_result.end(), _content.begin(), _content.end());
+	}
+	if (_Dest != nullptr)
+	{
+		memcpy(_Dest, _result.data(), _result.size() * sizeof(BYTE));
+		vector<BYTE>().swap(_result);
+	}
+	_size = _result.size();
+	return true;
+}
+extern "C" _declspec(dllexport)
+bool WINAPI ScnParser::Init(_In_ LPCWSTR _FileAddress)
+{
+	stream = nullptr;
+	try
+	{
+		ReadFile(_FileAddress);
+		return true;
+	}
+	catch (...)
+	{
+		return false;
+	}
+	//FindAllText();
+	
+}
+extern "C" _declspec(dllexport)
+ScnParser * WINAPI EstablishPointer()
+{
+	ScnParser* _parser = new ScnParser();
+	return _parser;
+}
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser()
 {
 	stream = nullptr;
 }
-_declspec(dllexport)
-ScnParser::ScnParser(const string& _fileAddress)
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser(const string& _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
-	FindAllText();
+	//FindAllText();
 }
-_declspec(dllexport)
-ScnParser::ScnParser(const wstring& _fileAddress)
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser(const wstring& _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
-	FindAllText();
+	//FindAllText();
 }
-_declspec(dllexport)
-ScnParser::ScnParser(const LPCSTR _fileAddress)
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser(const LPCSTR _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
-	FindAllText();
+	//FindAllText();
 }
-_declspec(dllexport)
-ScnParser::ScnParser(const LPCWSTR _fileAddress)
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser(const LPCWSTR _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
-	FindAllText();
+	//FindAllText();
 }
-_declspec(dllexport)
-ScnParser::ScnParser(BYTE* _buffer, size_t _size)
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::ScnParser(BYTE* _buffer, size_t _size)
 {
 	stream = new MemoryStream(_buffer, _size);
-	FindAllText();
+	//FindAllText();
 }
-_declspec(dllexport)
-ScnParser::~ScnParser()
+extern "C" _declspec(dllexport)
+WINAPI ScnParser::~ScnParser()
 {
 	if (stream != nullptr)
 	{
@@ -239,4 +309,12 @@ ScnParser::~ScnParser()
 	{
 		fileStream.close();
 	}
+}
+extern "C" _declspec(dllexport) bool WINAPI Init(ScnParser * _Ptr, _In_ LPCWSTR _FileAddress)
+{
+	return _Ptr->Init(_FileAddress);
+}
+extern "C" _declspec(dllexport) bool WINAPI Parse(ScnParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size)
+{
+	return _Ptr->Parse(_Dest, _size);
 }

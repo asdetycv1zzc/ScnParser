@@ -17,6 +17,9 @@ int wmain(int argc, wchar_t* argv[])
 	else
 	{
 		//scanf("%s",_fileAddress.c_str());
-		ScnParser parser(_fileAddress);
+		ScnParser parser;
+		parser.Init(_fileAddress.c_str());
+		ulong _size;
+		parser.Parse(NULL, _size);
 	}
 }

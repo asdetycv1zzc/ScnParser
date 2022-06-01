@@ -72,6 +72,7 @@ void MemoryStream::Write(const BYTE* _Src, size_t _Size)
 void MemoryStream::Write(size_t _Pos, const BYTE* _Src, size_t _Size)
 {
 	memcpy(_base.get() + _Pos, _Src, _Size);
+	Position += _Size;
 }
 MemoryStream::MemoryStream(BYTE* _Ptr,unsigned int _size)
 {

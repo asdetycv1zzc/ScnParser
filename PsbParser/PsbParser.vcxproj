@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BitConverter.h" />
     <ClInclude Include="CSharpString.h" />
     <ClInclude Include="csharp_types.h" />
     <ClInclude Include="Encoding.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Parser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BitConverter.cpp" />
     <ClCompile Include="CSharpString.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Encoding.cpp" />
