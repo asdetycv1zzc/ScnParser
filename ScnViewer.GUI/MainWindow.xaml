@@ -11,6 +11,7 @@
         <TreeView x:Name="TreeView_ScnStrings"
 pu:TreeViewHelper.TreeViewStyle="Modern"
 pu:TreeViewHelper.ItemHeight="20"
+pu:TreeViewHelper.ExpandMode="SingleClick"
 pu:TreeViewHelper.SelectedForeground="#FFB5B5B5" Margin="10,69,760,10" >
         </TreeView>
         <Button x:Name="Button_Confirm"
@@ -27,5 +28,14 @@ pu:TextBoxHelper.Watermark="Watermark"
 pu:TextBoxHelper.FocusedBorderBrush="#FF0014"
 pu:TextBoxHelper.FocusedShadowColor="#FF0014"
 pu:TextBoxHelper.CornerRadius="12" Margin="10,10,903,641" Cursor="IBeam" Text="N:\Users\John\source\repos\ScnParser\Debug\サガプラ怪盗　あてな　２.txt.json"/>
+        <TextBox
+pu:TextBoxHelper.Watermark="Type here..."
+pu:TextBoxHelper.Icon="&#xf11c;"
+pu:TextBoxHelper.FocusedBorderBrush="#11FF00"
+pu:TextBoxHelper.FocusedShadowColor="#11FF00"
+pu:TextBoxHelper.CornerRadius="8"
+pu:TextBoxHelper.IsClearButtonVisible="True" Margin="559,259,10,308" Cursor="IBeam" />
+        <TextBlock x:Name="TextBlock_SourceText" HorizontalAlignment="Left" Height="157" Margin="559,64,0,0" TextWrapping="Wrap" Text="SourceText: " VerticalAlignment="Top" Width="713" FontFamily="Consolas" FontWeight="Normal" FontSize="20"/>
+        <TextBlock x:Name="TextBlock_ModifiedText" HorizontalAlignment="Left" Height="28" Margin="559,226,0,0" TextWrapping="Wrap" Text="ModifiedText: " VerticalAlignment="Top" Width="713" FontFamily="Consolas" FontWeight="Normal" FontSize="20"/>
     </Grid>
 </Window>

@@ -73,6 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>N:\Users\John\source\repos\ScnParser\ScnParser\zlib;N:\Users\John\source\repos\ScnParser\ScnParser;$(VC_IncludePath);$(WindowsSDK_IncludePath);N:\Users\John\source\repos\ScnParser\ScnParser\jsoncpp_static</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -156,7 +157,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PsbParser\PsbParser.vcxproj">
+    <ProjectReference Include="..\ScnParser\PsbParser.vcxproj">
       <Project>{add462b3-6963-4e92-98be-21cb8839c862}</Project>
     </ProjectReference>
   </ItemGroup>

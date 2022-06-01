@@ -26,23 +26,25 @@ namespace ScnViewer
         };
         private IntPtr _pointer = IntPtr.Zero;
         [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        private static extern IntPtr EstablishPointer();
+        private static extern IntPtr EstablishJsonParserPointer();
         [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        private static extern bool Init(IntPtr ptr, StringBuilder _FileAddress);
+        private static extern void DispatchJsonParserPointer(IntPtr ptr);
         [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        private static extern bool Parse(IntPtr ptr, [MarshalAs(UnmanagedType.LPArray)] byte[] _dest, ref ulong _size);
+        private static extern bool JsonParserInit(IntPtr ptr, StringBuilder _FileAddress);
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        private static extern bool JsonParserParse(IntPtr ptr, [MarshalAs(UnmanagedType.LPArray)] byte[] _dest, ref ulong _size);
 
         public bool Init(StringBuilder _FileAddress)
         {
-            return Init(_pointer, _FileAddress);
+            return JsonParserInit(_pointer, _FileAddress);
         }
         public List<ScnString> Parse()
         {
             byte[] _temp = null;
             ulong _size = 0;
-            Parse(_pointer, _temp, ref (_size));
+            JsonParserParse(_pointer, _temp, ref (_size));
             byte[] _result_in_byte = new byte[_size];
-            Parse(_pointer,_result_in_byte, ref _size);
+            JsonParserParse(_pointer,_result_in_byte, ref _size);
 
             MemoryStream resultStream = new MemoryStream(_result_in_byte);
             BinaryReader binaryStream = new BinaryReader(resultStream);
@@ -83,12 +85,19 @@ namespace ScnViewer
         }
         public Parser()
         {
-            _pointer = EstablishPointer();
+            _pointer = EstablishJsonParserPointer();
         }
         public Parser(StringBuilder _fileAddress)
         {
-            _pointer = EstablishPointer();
-            Init(_pointer, _fileAddress);
+            _pointer = EstablishJsonParserPointer();
+            JsonParserInit(_pointer, _fileAddress);
+        }
+        ~Parser()
+        {
+            if(this._pointer != null)
+            {
+                DispatchJsonParserPointer(this._pointer);
+            }
         }
     }
 

@@ -34,9 +34,8 @@ protected:
 	void ReadFile(const std::string& _source) noexcept;
 	void ReadFile(const LPCWSTR _source) noexcept;
 	void ReadFile(const LPCSTR _source) noexcept;
-public:
-	_declspec(dllexport) virtual bool WINAPI Parse(_Out_ BYTE* _Dest, _Out_ ulong& _size);
-	_declspec(dllexport) virtual bool WINAPI Init(_In_ LPCWSTR _FileAddress);
+
+	
 };
 class ScnJsonParser : public ScnParser
 {
@@ -72,9 +71,12 @@ public:
 	_declspec(dllexport) WINAPI ScnJsonParser(const LPCWSTR _fileAddress);
 	_declspec(dllexport) WINAPI ScnJsonParser(BYTE* _buffer, size_t _size);
 	_declspec(dllexport) WINAPI ~ScnJsonParser();
+
+	_declspec(dllexport) void WINAPI Dispose() noexcept;
 };
 
 extern "C" _declspec(dllexport) ScnJsonParser * WINAPI EstablishJsonParserPointer();
+extern "C" _declspec(dllexport) void WINAPI DispatchJsonParserPointer(ScnJsonParser * _Ptr);
 extern "C" _declspec(dllexport) bool WINAPI JsonParserInit(ScnJsonParser * _Ptr, _In_ LPCWSTR _FileAddress);
 extern "C" _declspec(dllexport) bool WINAPI JsonParserParse(ScnJsonParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size);
 
@@ -98,7 +100,4 @@ private:
 	void ValidateMagic() noexcept;
 	void ReadMagicHeader() noexcept;
 	bool ReadAllText() noexcept;
-public:
-	_declspec(dllexport) bool WINAPI Parse(_Out_ BYTE* _Dest, _Out_ ulong& _size);
-	_declspec(dllexport) bool WINAPI Init(_In_ LPCWSTR _FileAddress);
 };

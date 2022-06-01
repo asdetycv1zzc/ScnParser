@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ScnViewer;
+using Panuon.UI.Silver;
+using Panuon.UI.Silver.Controls;
 
 namespace ScnViewer.GUI
 {

@@ -141,38 +141,30 @@ void ScnJsonParser::FindAllText() noexcept
 
 				_scnString.Speaker = StringToWString(block[0].asString().c_str());
 
-				bool _finished = false;
 
 				for (auto& singleLine : block[1][0])
 				{
+					if (singleLine.isInt() || singleLine.isNull())
+						continue;
 					try
 					{
-						if (!singleLine.isNull() && _finished != true)
+						ScnSingleString _scnSingleString;
+						_scnSingleString._Content = StringToWString(singleLine.asString().c_str());
+						_scnSingleString._beginPos = singleLine.getOffsetStart() + _beginPos + 1; //Go over the " symbol
+						//_scnSingleString._Ptr = (uint)(stream->GetBase() + _scnSingleString._beginPos);
+						stream->Seek(_scnSingleString._beginPos, MEM_BEG);
+						char buffer = 0;
+						do
 						{
-							if (singleLine.isInt())
-								_finished = true;
-							else
-							{
-								ScnSingleString _scnSingleString;
-								_scnSingleString._Content = StringToWString(singleLine.asString().c_str());
-								_scnSingleString._beginPos = singleLine.getOffsetStart() + _beginPos + 1; //Go over the " symbol
-								_scnSingleString._Ptr = (uint)(stream->GetBase() + _scnSingleString._beginPos);
-								stream->Seek(_scnSingleString._beginPos, MEM_BEG);
-								char buffer = 0;
-								do
-								{
-									stream->Read(&buffer, sizeof(char));
-								} 
-								while (buffer != '\"');
-								_scnSingleString._endPos = stream->GetPosition() - 1;
-								//_scnSingleString._endPos = _scnSingleString._beginPos + _scnSingleString._Content.size() * sizeof(char) / sizeof(BYTE);
-								_scnSingleString._real_size = _scnSingleString._Content.size();
-								_scnSingleString._memory_size = _scnSingleString._real_size * sizeof(wchar_t);
-								_scnSingleString._in_file_size = _scnSingleString._endPos - _scnSingleString._beginPos;
-								_scnString.Content.push_back(_scnSingleString);
-							}
-								
-						}
+							stream->Read(&buffer, sizeof(char));
+						} while (buffer != '\"');
+						_scnSingleString._endPos = stream->GetPosition() - 1;
+						//_scnSingleString._endPos = _scnSingleString._beginPos + _scnSingleString._Content.size() * sizeof(char) / sizeof(BYTE);
+						_scnSingleString._real_size = _scnSingleString._Content.size();
+						_scnSingleString._memory_size = _scnSingleString._real_size * sizeof(wchar_t);
+						_scnSingleString._in_file_size = _scnSingleString._endPos - _scnSingleString._beginPos;
+						_scnString.Content.push_back(_scnSingleString);
+
 					}
 					catch (...)
 					{
@@ -192,7 +184,7 @@ void ScnJsonParser::FindAllText() noexcept
 
 
 extern "C" _declspec(dllexport)
-bool WINAPI ScnJsonParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
+bool WINAPI ScnJsonParser::Parse(_Out_ BYTE * _Dest, _Out_ ulong & _size)
 {
 	if (ScnStringPool.empty())
 	{
@@ -219,7 +211,7 @@ bool WINAPI ScnJsonParser::Parse(_Out_ BYTE* _Dest,_Out_ ulong& _size)
 			vector<BYTE> _singleScnString(_scnString_sizes->GetSize() + _contentString.size());
 			memcpy(_singleScnString.data(), _scnString_sizes->GetBase(), _scnString_sizes->GetSize());
 			memcpy(_singleScnString.data() + _scnString_sizes->GetSize(), _contentString.data(), _contentString.size());
-			_content.insert(_content.end(), _singleScnString.begin(),_singleScnString.end());
+			_content.insert(_content.end(), _singleScnString.begin(), _singleScnString.end());
 			_scnString_sizes->Dispose();
 		}
 		_result.insert(_result.end(), _speaker_size.begin(), _speaker_size.end());
@@ -248,13 +240,7 @@ bool WINAPI ScnJsonParser::Init(_In_ LPCWSTR _FileAddress)
 		return false;
 	}
 	//FindAllText();
-	
-}
-extern "C" _declspec(dllexport)
-ScnJsonParser * WINAPI JsonParserEstablishPointer()
-{
-	ScnJsonParser* _parser = new ScnJsonParser();
-	return _parser;
+
 }
 extern "C" _declspec(dllexport)
 WINAPI ScnJsonParser::ScnJsonParser()
@@ -262,14 +248,14 @@ WINAPI ScnJsonParser::ScnJsonParser()
 	stream = nullptr;
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnJsonParser::ScnJsonParser(const string& _fileAddress)
+WINAPI ScnJsonParser::ScnJsonParser(const string & _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnJsonParser::ScnJsonParser(const wstring& _fileAddress)
+WINAPI ScnJsonParser::ScnJsonParser(const wstring & _fileAddress)
 {
 	stream = nullptr;
 	ReadFile(_fileAddress);
@@ -290,13 +276,18 @@ WINAPI ScnJsonParser::ScnJsonParser(const LPCWSTR _fileAddress)
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
-WINAPI ScnJsonParser::ScnJsonParser(BYTE* _buffer, size_t _size)
+WINAPI ScnJsonParser::ScnJsonParser(BYTE * _buffer, size_t _size)
 {
 	stream = new MemoryStream(_buffer, _size);
 	//FindAllText();
 }
 extern "C" _declspec(dllexport)
 WINAPI ScnJsonParser::~ScnJsonParser()
+{
+	Dispose();
+}
+extern "C" _declspec(dllexport)
+void WINAPI ScnJsonParser::Dispose() noexcept
 {
 	if (stream != nullptr)
 	{
@@ -310,11 +301,26 @@ WINAPI ScnJsonParser::~ScnJsonParser()
 		fileStream.close();
 	}
 }
-extern "C" _declspec(dllexport) bool WINAPI JsonParserInit(ScnJsonParser * _Ptr, _In_ LPCWSTR _FileAddress)
+
+extern "C" _declspec(dllexport)
+ScnJsonParser * WINAPI EstablishJsonParserPointer()
+{
+	ScnJsonParser* _parser = new ScnJsonParser();
+	return _parser;
+}
+extern "C" _declspec(dllexport)
+void WINAPI DispatchJsonParserPointer(ScnJsonParser * _Ptr)
+{
+	_Ptr->Dispose();
+	_Ptr = nullptr;
+}
+extern "C" _declspec(dllexport) 
+bool WINAPI JsonParserInit(ScnJsonParser * _Ptr, _In_ LPCWSTR _FileAddress)
 {
 	return _Ptr->Init(_FileAddress);
 }
-extern "C" _declspec(dllexport) bool WINAPI JsonParserParse(ScnJsonParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size)
+extern "C" _declspec(dllexport) 
+bool WINAPI JsonParserParse(ScnJsonParser * _Ptr, _Out_ BYTE * _Dest, _Out_ ulong & _size)
 {
 	return _Ptr->Parse(_Dest, _size);
 }

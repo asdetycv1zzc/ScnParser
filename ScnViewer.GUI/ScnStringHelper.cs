@@ -23,11 +23,11 @@ namespace ScnViewer.GUI
                 {
                     Header = _source[i].Content[0]._beginPos.ToString() + '-' + _source[i].Content[0]._endPos.ToString()
                 };
-                _item.Items.Add(new TreeViewItem { Header = _source[i].Speaker });
                 for (int j = 0; j < _source[i].Content.Count; j++)
                 {
-                    _item.Items.Add(new TreeViewItem { Header = _source[i].Content[j]._Content });
+                    _item.Items.Add(new TreeViewItem { Header = _source[i].Speaker + "：" + _source[i].Content[j]._Content });
                 }
+                
                 _result.Add(_item);
             }
             return _result;
