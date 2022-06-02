@@ -116,7 +116,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>N:\Users\John\source\repos\vcpkg\packages\jsoncpp_x86-windows\include\json</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>N:\Users\John\source\repos\ScnParser\ScnParser;N:\Users\John\source\repos\vcpkg\packages\jsoncpp_x86-windows\include\json</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>

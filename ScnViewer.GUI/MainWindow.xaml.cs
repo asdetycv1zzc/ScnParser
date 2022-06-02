@@ -37,9 +37,11 @@ namespace ScnViewer.GUI
                 parser.Init(_address);
                 var _result = parser.Parse();
                 var _items = ScnStringHelper.ToTreeViewItems(_result);
-                for(int i = 0; i < _items.Count; i++)
+                ScnStringHelper.BindScnStringWithTextBlock(ref _items, TextBlock_SourceText);
+                for (int i = 0; i < _items.Count; i++)
                 {
                     TreeView_ScnStrings.Items.Add(_items[i]);
+                    
                 }
             }
             catch(Exception ex)

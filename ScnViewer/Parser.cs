@@ -25,13 +25,13 @@ namespace ScnViewer
             public List<ScnSingleString> Content;
         };
         private IntPtr _pointer = IntPtr.Zero;
-        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Release\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern IntPtr EstablishJsonParserPointer();
-        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Release\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern void DispatchJsonParserPointer(IntPtr ptr);
-        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Release\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern bool JsonParserInit(IntPtr ptr, StringBuilder _FileAddress);
-        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Debug\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [DllImport("N:\\Users\\John\\source\\repos\\ScnParser\\Release\\ScnParser.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         private static extern bool JsonParserParse(IntPtr ptr, [MarshalAs(UnmanagedType.LPArray)] byte[] _dest, ref ulong _size);
 
         public bool Init(StringBuilder _FileAddress)
